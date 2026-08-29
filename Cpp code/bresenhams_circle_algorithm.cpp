@@ -1,41 +1,32 @@
 #include <graphics.h>
+#include <conio.h>
 #include <iostream>
 using namespace std;
 
-void drawCirclePoints(int xc, int yc, int x, int y) {
-    putpixel(xc+x, yc+y, WHITE);
-    putpixel(xc-x, yc+y, WHITE);
-    putpixel(xc+x, yc-y, WHITE);
-    putpixel(xc-x, yc-y, WHITE);
-    putpixel(xc+y, yc+x, WHITE);
-    putpixel(xc-y, yc+x, WHITE);
-    putpixel(xc+y, yc-x, WHITE);
-    putpixel(xc-y, yc-x, WHITE);
-}
-
 int main() {
-    int gd = DETECT, gm;
-    initwindow(800, 600, (char*)"Bresenham Circle Drawing");
+    int gd=DETECT,gm;
+    initgraph(&gd,&gm,"");
 
-    int xc, yc, r;
-    cout << "Enter center (xc yc) and radius r: ";
-    cin >> xc >> yc >> r;
+    int xc,yc,r;
+    cout<<"Enter xc yc r: "; cin>>xc>>yc>>r;
 
-    int x = 0, y = r;
-    int p = 3 - 2*r;
+    int x=0,y=r,d=3-2*r;
+    while(y>=x) {
+        putpixel(xc+x,yc+y,RED);
+        putpixel(xc+y,yc+x,RED);
+        putpixel(xc+x,yc-y,RED);
+        putpixel(xc+y,yc-x,RED);
+        putpixel(xc-x,yc-y,RED);
+        putpixel(xc-y,yc-x,RED);
+        putpixel(xc-x,yc+y,RED);
+        putpixel(xc-y,yc+x,RED);
 
-    while (x <= y) {
-        drawCirclePoints(xc, yc, x, y);
-        if (p < 0) {
-            p += 4*x + 6;
-        } else {
-            p += 4*(x - y) + 10;
-            y--;
-        }
         x++;
+        if(d>0){ y--; d=d+4*(x-y)+10; }
+        else d=d+4*x+6;
     }
 
-    outtextxy(50, 30, (char*)"Bresenham Circle");
     getch();
     closegraph();
+    return 0;
 }
