@@ -1,30 +1,65 @@
 #include <iostream>
 #include <graphics.h>
-#include <cmath>
-using namespace std;
+#include <conio.h>
 
-int main() {
-    float x1, y1, x2, y2;
-    cout << "Enter first point (x1 y1): ";
-    cin >> x1 >> y1;
-    cout << "Enter second point (x2 y2): ";
-    cin >> x2 >> y2;
-
+int main()
+{
     int gd = DETECT, gm;
     initgraph(&gd, &gm, "");
 
-    float dx = x2 - x1;
-    float dy = y2 - y1;
-    float steps = (fabs(dx) > fabs(dy)) ? fabs(dx) : fabs(dy);
+    int x1, y1, x2, y2;
+    int x, xend;
+    float y, dx, dy, m, c;
 
-    float xi = dx / steps;
-    float yi = dy / steps;
+    std::cout << "Enter the value of x1: ";
+    std::cin >> x1;
 
-    float x = x1, y = y1;
-    for (int i = 0; i <= steps; i++) {
-        putpixel(round(x), round(y), WHITE);
-        x += xi;
-        y += yi;
+    std::cout << "Enter the value of y1: ";
+    std::cin >> y1;
+
+    std::cout << "Enter the value of x2: ";
+    std::cin >> x2;
+
+    std::cout << "Enter the value of y2: ";
+    std::cin >> y2;
+
+    dx = (float)(x2 - x1);
+    dy = (float)(y2 - y1);
+
+    // handle vertical line to avoid division by zero
+    if (dx == 0.0f) {
+        int ymin = (y1 < y2) ? y1 : y2;
+        int ymax = (y1 > y2) ? y1 : y2;
+        for (int yy = ymin; yy <= ymax; yy++) {
+            putpixel(x1, yy, WHITE);
+        }
+    } else {
+        m = dy / dx;
+
+        if (dx > 0)
+        {
+            x = x1;
+            y = (float)y1;
+            xend = x2;
+        }
+        else
+        {
+            x = x2;
+            y = (float)y2;
+            xend = x1;
+        }
+
+        c = y - m * x;
+
+        while (x != xend)
+        {
+            putpixel(x, (int)(y + 0.5f), WHITE);
+
+            x = x + 1;
+            y = m * x + c;
+        }
+
+        putpixel(xend, (int)(y + 0.5f), WHITE);
     }
 
     getch();
