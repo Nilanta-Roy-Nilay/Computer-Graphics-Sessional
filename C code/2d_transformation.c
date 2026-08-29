@@ -1,112 +1,174 @@
-#include <stdio.h>
-#include <conio.h>
 #include <graphics.h>
-#include <math.h>
+#include <conio.h>
 
-int tri[3][2];
-
-void drawTriangle() {
-    line(tri[0][0], tri[0][1], tri[1][0], tri[1][1]);
-    line(tri[1][0], tri[1][1], tri[2][0], tri[2][1]);
-    line(tri[2][0], tri[2][1], tri[0][0], tri[0][1]);
-}
-
-void translate2D(int tx, int ty) {
-    int i;
-    for(i = 0; i < 3; i++) {
-        tri[i][0] += tx;
-        tri[i][1] += ty;
-    }
-}
-
-void scale2D(float sx, float sy) {
-    int cx = (tri[0][0] + tri[1][0] + tri[2][0]) / 3;
-    int cy = (tri[0][1] + tri[1][1] + tri[2][1]) / 3;
-    int i;
-
-    for(i = 0; i < 3; i++) {
-        int x = tri[i][0] - cx;
-        int y = tri[i][1] - cy;
-        tri[i][0] = cx + (int)round(x * sx);
-        tri[i][1] = cy + (int)round(y * sy);
-    }
-}
-
-void rotate2D(float theta) {
-    int cx = (tri[0][0] + tri[1][0] + tri[2][0]) / 3;
-    int cy = (tri[0][1] + tri[1][1] + tri[2][1]) / 3;
-    int i;
-
-    for(i = 0; i < 3; i++) {
-        int x = tri[i][0] - cx;
-        int y = tri[i][1] - cy;
-
-        tri[i][0] = cx + (int)round(x * cos(theta) - y * sin(theta));
-        tri[i][1] = cy + (int)round(x * sin(theta) + y * cos(theta));
-    }
-}
-
-int main() {
-    int tx, ty;
-    float sx, sy, angle;
-    int xmax, ymax;
+int main()
+{
     int gd = DETECT, gm;
-
-    printf("Enter coordinates for Point 1 (x1 y1): ");
-    scanf("%d %d", &tri[0][0], &tri[0][1]);
-
-    printf("Enter coordinates for Point 2 (x2 y2): ");
-    scanf("%d %d", &tri[1][0], &tri[1][1]);
-
-    printf("Enter coordinates for Point 3 (x3 y3): ");
-    scanf("%d %d", &tri[2][0], &tri[2][1]);
-
-    printf("Enter Translation (tx ty): ");
-    scanf("%d %d", &tx, &ty);
-
-    printf("Enter Scaling factors (sx sy): ");
-    scanf("%f %f", &sx, &sy);
-
-    printf("Enter Rotation angle (in radians): ");
-    scanf("%f", &angle);
-
     initgraph(&gd, &gm, "");
 
-    xmax = getmaxx();
-    ymax = getmaxy();
+    rectangle(100, 100, 200, 200);
 
-    // অক্ষ (Axis) ড্র করার জন্য সেন্টারিং লাইন
-    line(xmax / 2, 0, xmax / 2, ymax);
-    line(0, ymax / 2, xmax, ymax / 2);
+    int tx = 100;
+    int ty = 50;
 
-    drawTriangle();
-    outtextxy(50, 30, "Original Triangle");
+    rectangle(100 + tx, 100 + ty,
+              200 + tx, 200 + ty);
+
     getch();
-    cleardevice();
-
-    line(xmax / 2, 0, xmax / 2, ymax);
-    line(0, ymax / 2, xmax, ymax / 2);
-    translate2D(tx, ty);
-    drawTriangle();
-    outtextxy(50, 30, "After Translation");
-    getch();
-    cleardevice();
-
-    line(xmax / 2, 0, xmax / 2, ymax);
-    line(0, ymax / 2, xmax, ymax / 2);
-    scale2D(sx, sy);
-    drawTriangle();
-    outtextxy(50, 30, "After Scaling");
-    getch();
-    cleardevice();
-
-    line(xmax / 2, 0, xmax / 2, ymax);
-    line(0, ymax / 2, xmax, ymax / 2);
-    rotate2D(angle);
-    drawTriangle();
-    outtextxy(50, 30, "After Rotation");
-    getch();
-
     closegraph();
+
+    return 0;
+}
+
+
+
+
+rota
+
+#include <graphics.h>
+#include <conio.h>
+#include <math.h>
+
+int main()
+{
+    int gd = DETECT, gm;
+    initgraph(&gd, &gm, "");
+
+    int x1 = 100, y1 = 100;
+    int x2 = 200, y2 = 100;
+    int x3 = 200, y3 = 200;
+    int x4 = 100, y4 = 200;
+
+    float angle = 12;
+    float rad = angle * 3.1416 / 180;
+
+    int nx1, ny1, nx2, ny2;
+    int nx3, ny3, nx4, ny4;
+
+    // Original
+    rectangle(x1, y1, x3, y3);
+
+    // Rotation around origin
+    nx1 = x1 * cos(rad) - y1 * sin(rad);
+    ny1 = x1 * sin(rad) + y1 * cos(rad);
+
+    nx2 = x2 * cos(rad) - y2 * sin(rad);
+    ny2 = x2 * sin(rad) + y2 * cos(rad);
+
+    nx3 = x3 * cos(rad) - y3 * sin(rad);
+    ny3 = x3 * sin(rad) + y3 * cos(rad);
+
+    nx4 = x4 * cos(rad) - y4 * sin(rad);
+    ny4 = x4 * sin(rad) + y4 * cos(rad);
+
+    line(nx1, ny1, nx2, ny2);
+    line(nx2, ny2, nx3, ny3);
+    line(nx3, ny3, nx4, ny4);
+    line(nx4, ny4, nx1, ny1);
+
+    getch();
+    closegraph();
+
+    return 0;
+}
+
+
+
+
+
+Scaling
+
+#include <graphics.h>
+#include <conio.h>
+
+int main()
+{
+    int gd = DETECT, gm;
+    initgraph(&gd, &gm, "");
+
+    int x1 = 100, y1 = 100;
+    int x2 = 200, y2 = 200;
+
+    float sx = 1.5;
+    float sy = 2.0;
+
+    // Original
+    rectangle(x1, y1, x2, y2);
+
+    // Scaling
+    rectangle(x1 * sx, y1 * sy,
+              x2 * sx, y2 * sy);
+
+    getch();
+    closegraph();
+
+    return 0;
+}
+
+
+
+
+Reflection
+
+#include <graphics.h>
+#include <conio.h>
+
+int main()
+{
+    int gd = DETECT, gm;
+    initgraph(&gd, &gm, "");
+
+    int x1 = 100, y1 = 100;
+    int x2 = 200, y2 = 200;
+
+    // Original
+    rectangle(x1, y1, x2, y2);
+
+    // Reflection about X-axis
+    rectangle(x1, -y1, x2, -y2);
+
+    getch();
+    closegraph();
+
+    return 0;
+}
+
+
+
+
+Shearing
+
+#include <graphics.h>
+#include <conio.h>
+
+int main()
+{
+    int gd = DETECT, gm;
+    initgraph(&gd, &gm, "");
+
+    int x1 = 100, y1 = 100;
+    int x2 = 200, y2 = 100;
+    int x3 = 200, y3 = 200;
+    int x4 = 100, y4 = 200;
+
+    int shx = 1;
+
+    // Original
+    rectangle(x1, y1, x3, y3);
+
+    // Shearing
+    int nx1 = x1 + shx * y1;
+    int nx2 = x2 + shx * y2;
+    int nx3 = x3 + shx * y3;
+    int nx4 = x4 + shx * y4;
+
+    line(nx1, y1, nx2, y2);
+    line(nx2, y2, nx3, y3);
+    line(nx3, y3, nx4, y4);
+    line(nx4, y4, nx1, y1);
+
+    getch();
+    closegraph();
+
     return 0;
 }
