@@ -1,48 +1,52 @@
-# bresenham_circle.py
 import matplotlib.pyplot as plt
 
-def bresenham_circle():
-    xc = int(input("Input center of the circle xc: "))
-    yc = int(input("Input center of the circle yc: "))
-    r = int(input("Input the radius of the circle r: "))
-    
-    p = 3 - (2 * r)
-    x = 0
-    y = r
-    
-    x_coords = []
-    y_coords = []
-    
-    def plot_symmetric_points(xc, yc, x, y):
-        points = [
-            (xc + x, yc + y), (xc - x, yc + y),
-            (xc + x, yc - y), (xc - x, yc - y),
-            (xc + y, yc + x), (xc - y, yc + x),
-            (xc + y, yc - x), (xc - y, yc - x)
-        ]
-        for px, py in points:
-            x_coords.append(px)
-            y_coords.append(py)
+xc = int(input("Enter the value of xc: "))
+yc = int(input("Enter the value of yc: "))
+r = int(input("Enter the value of radius: "))
 
-    while x <= y:
-        plot_symmetric_points(xc, yc, x, y)
-        if p < 0:
-            x += 1
-            p += (4 * x) + 6
-        else:
-            x += 1
-            y -= 1
-            p += (4 * (x - y)) + 10
-            
-    plt.figure()
-    plt.axhline(0, color='black', linewidth=1)
-    plt.axvline(0, color='black', linewidth=1)
-    plt.scatter(x_coords, y_coords, color='black', s=20)
-    plt.title("Bresenham's Circle Algorithm")
-    plt.xlabel("X-axis")
-    plt.ylabel("Y-axis")
-    plt.grid(True)
-    plt.show()
+x = 0
+y = r
+p = 3 - 2 * r
 
-if __name__ == "__main__":
-    bresenham_circle()
+x_point = []
+y_point = []
+
+while x <= y:
+
+  
+    x_point.append(xc + x)
+    y_point.append(yc + y)
+
+    x_point.append(xc + y)
+    y_point.append(yc + x)
+
+    x_point.append(xc + x)
+    y_point.append(yc - y)
+
+    x_point.append(xc + y)
+    y_point.append(yc - x)
+
+    x_point.append(xc - x)
+    y_point.append(yc - y)
+
+    x_point.append(xc - y)
+    y_point.append(yc - x)
+
+    x_point.append(xc - x)
+    y_point.append(yc + y)
+
+    x_point.append(xc - y)
+    y_point.append(yc + x)
+
+    if p < 0:
+        x = x + 1
+        p = p + 4 * x + 6
+    else:
+        x = x + 1
+        y = y - 1
+        p = p + 4 * (x - y) + 10
+
+plt.scatter(x_point, y_point, color='blue')
+plt.gca().set_aspect('equal')
+plt.grid(True)
+plt.show()
