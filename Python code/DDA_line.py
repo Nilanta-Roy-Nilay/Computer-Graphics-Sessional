@@ -1,28 +1,35 @@
 import matplotlib.pyplot as plt
 
-def dda_line(x1, y1, x2, y2):
-    dx = x2 - x1
-    dy = y2 - y1
+x1=int(input("Enter the value of x1:"))
+y1=int(input("Enter the value of y1:"))
+x2=int(input("Enter the value of x2:"))
+y2=int(input("Enter the value of y2:"))
 
-    # abs ব্যবহার করা হয়েছে
-    length = abs(dx) if abs(dx) >= abs(dy) else abs(dy)
-    xi = dx / length
-    yi = dy / length
 
-    x, y = x1, y1
-    xs, ys = [], []
-    for _ in range(int(length)+1):
-        xs.append(round(x))
-        ys.append(round(y))
-        x += xi
-        y += yi
+dx=x2-x1
+dy=y2-y1
 
-    plt.plot(xs, ys, marker='o', color='blue')
-    plt.axhline(0, color='black')
-    plt.axvline(0, color='black')
-    plt.gca().set_aspect('equal')
-    plt.show()
+m=dy/dx
 
-x1, y1 = map(int, input("Enter first point: ").split())
-x2, y2 = map(int, input("Enter second point: ").split())
-dda_line(x1, y1, x2, y2)
+x= x1
+y=y1
+
+
+x_point=[]
+y_point=[]
+
+while(round(x)!=x2):
+    x_point.append(round(x))
+    y_point.append(round(y))
+
+if abs(dx)>=abs(dy):
+    x=x+1
+    y=y+m
+   
+else:
+    x=x+(1/m)
+    y=y+1
+  
+plt.plot(x_point,y_point)
+plt.show()
+
