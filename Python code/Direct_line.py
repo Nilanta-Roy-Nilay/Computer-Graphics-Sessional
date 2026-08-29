@@ -1,15 +1,35 @@
 import matplotlib.pyplot as plt
 
-def direct_line(x1, y1, x2, y2):
-    m = (y2 - y1) / (x2 - x1)
-    c = y1 - m * x1
-    xs, ys = [], []
-    for x in range(x1, x2+1):
-        y = round(m * x + c)
-        xs.append(x); ys.append(y)
-    plt.plot(xs, ys, marker='o', color='blue')
-    plt.show()
+x1=int(input("Enter the value of x1:"))
+y1=int(input("Enter the value of y1:"))
+x2=int(input("Enter the value of x2:"))
+y2=int(input("Enter the value of y2:"))
 
-x1, y1 = map(int, input("Enter first point: ").split())
-x2, y2 = map(int, input("Enter second point: ").split())
-direct_line(x1, y1, x2, y2)
+
+dx=x2-x1
+dy=y2-y1
+
+m=dy/dx
+if dx>0:
+    x=x1
+    y=y1
+    xend = x2
+else:
+    x=x2
+    y=y2
+    xend= x1
+c = y-m*x
+
+x_point=[]
+y_point=[]
+
+while(x!=xend):
+    x_point.append(round(x))
+    y_point.append(round(y))
+
+    x=x+1
+    y=m*x+c
+plt.plot(x_point,y_point)
+plt.show()
+
+
