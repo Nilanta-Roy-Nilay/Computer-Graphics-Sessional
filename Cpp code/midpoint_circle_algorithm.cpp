@@ -1,38 +1,29 @@
-#include <iostream>
 #include <graphics.h>
 #include <conio.h>
+#include <iostream>
 using namespace std;
 
 int main() {
-    int xc, yc, r;
-    cout << "Enter xc: "; cin >> xc;
-    cout << "Enter yc: "; cin >> yc;
-    cout << "Enter r: ";  cin >> r;
+    int gd=DETECT,gm;
+    initgraph(&gd,&gm,"");
 
-    int gd = DETECT, gm;
-    initgraph(&gd, &gm, "");
+    int xc,yc,r;
+    cout<<"Enter xc yc r: "; cin>>xc>>yc>>r;
 
-    int x = 0;
-    int y = r;
-    int p = 1 - r;
+    int x=0,y=r,p=1-r;
+    while(x<=y) {
+        putpixel(xc+x,yc+y,RED);
+        putpixel(xc+y,yc+x,RED);
+        putpixel(xc+x,yc-y,RED);
+        putpixel(xc+y,yc-x,RED);
+        putpixel(xc-x,yc-y,RED);
+        putpixel(xc-y,yc-x,RED);
+        putpixel(xc-x,yc+y,RED);
+        putpixel(xc-y,yc+x,RED);
 
-    while (x <= y) {
-        putpixel(xc + x, yc + y, RED);
-        putpixel(xc + y, yc + x, RED);
-        putpixel(xc + x, yc - y, RED);
-        putpixel(xc + y, yc - x, RED);
-        putpixel(xc - x, yc - y, RED);
-        putpixel(xc - y, yc - x, RED);
-        putpixel(xc - x, yc + y, RED);
-        putpixel(xc - y, yc + x, RED);
-
-        x = x + 1;
-        if (p < 0) {
-            p = p + 2 * x + 1;
-        } else {
-            y = y - 1;
-            p = p + 2 * (x - y) + 1;
-        }
+        x++;
+        if(p<0) p+=2*x+1;
+        else { y--; p+=2*(x-y)+1; }
     }
 
     getch();
