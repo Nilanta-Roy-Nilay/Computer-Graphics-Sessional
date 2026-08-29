@@ -1,96 +1,67 @@
 #include <graphics.h>
+#include <conio.h>
 #include <cmath>
 #include <iostream>
-
 using namespace std;
 
-int tri[3][2];
-
-void drawTriangle() {
-    line(tri[0][0], tri[0][1], tri[1][0], tri[1][1]);
-    line(tri[1][0], tri[1][1], tri[2][0], tri[2][1]);
-    line(tri[2][0], tri[2][1], tri[0][0], tri[0][1]);
-}
-
-void translate2D(int tx, int ty) {
-    for(int i = 0; i < 3; i++) {
-        tri[i][0] += tx;
-        tri[i][1] += ty;
-    }
-}
-
-void scale2D(float sx, float sy) {
-    int cx = (tri[0][0] + tri[1][0] + tri[2][0]) / 3;
-    int cy = (tri[0][1] + tri[1][1] + tri[2][1]) / 3;
-
-    for(int i = 0; i < 3; i++) {
-        int x = tri[i][0] - cx;
-        int y = tri[i][1] - cy;
-        tri[i][0] = cx + round(x * sx);
-        tri[i][1] = cy + round(y * sy);
-    }
-}
-
-void rotate2D(float theta) {
-    int cx = (tri[0][0] + tri[1][0] + tri[2][0]) / 3;
-    int cy = (tri[0][1] + tri[1][1] + tri[2][1]) / 3;
-
-    for(int i = 0; i < 3; i++) {
-        int x = tri[i][0] - cx;
-        int y = tri[i][1] - cy;
-
-        tri[i][0] = cx + round(x * cos(theta) - y * sin(theta));
-        tri[i][1] = cy + round(x * sin(theta) + y * cos(theta));
-    }
-}
-
 int main() {
-    cout << "Enter coordinates for Point 1 (x y): ";
-    cin >> tri[0][0] >> tri[0][1];
-
-    cout << "Enter coordinates for Point 2 (x y): ";
-    cin >> tri[1][0] >> tri[1][1];
-
-    cout << "Enter coordinates for Point 3 (x y): ";
-    cin >> tri[2][0] >> tri[2][1];
-
-    int tx, ty;
-    float sx, sy, angle;
-
-    cout << "Enter Translation (tx ty): ";
-    cin >> tx >> ty;
-
-    cout << "Enter Scaling factors (sx sy): ";
-    cin >> sx >> sy;
-
-    cout << "Enter Rotation angle (in radians): ";
-    cin >> angle;
-
     int gd = DETECT, gm;
-    initwindow(800, 600, (char*)"2D Transformation");
+    initgraph(&gd, &gm, "");
 
-    drawTriangle();
-    outtextxy(50, 30, (char*)"Original Triangle");
+    // Base rectangle coordinates
+    int x1=100, y1=100;
+    int x2=200, y2=100;
+    int x3=200, y3=200;
+    int x4=100, y4=200;
+
+    // Draw original rectangle
+    setcolor(WHITE);
+    rectangle(x1, y1, x3, y3);
+
+    // --- Translation ---
+    int tx=100, ty=50;
+    setcolor(GREEN);
+    rectangle(x1+tx, y1+ty, x3+tx, y3+ty);
+
+    // --- Scaling ---
+    float sx=1.5, sy=2.0;
+    setcolor(BLUE);
+    rectangle((int)(x1*sx), (int)(y1*sy), (int)(x3*sx), (int)(y3*sy));
+
+    // --- Rotation (about origin) ---
+    float angle=30; // degrees
+    float rad=angle*3.1416/180;
+    int nx1=x1*cos(rad)-y1*sin(rad);
+    int ny1=x1*sin(rad)+y1*cos(rad);
+    int nx2=x2*cos(rad)-y2*sin(rad);
+    int ny2=x2*sin(rad)+y2*cos(rad);
+    int nx3=x3*cos(rad)-y3*sin(rad);
+    int ny3=x3*sin(rad)+y3*cos(rad);
+    int nx4=x4*cos(rad)-y4*sin(rad);
+    int ny4=x4*sin(rad)+y4*cos(rad);
+    setcolor(RED);
+    line(nx1,ny1,nx2,ny2);
+    line(nx2,ny2,nx3,ny3);
+    line(nx3,ny3,nx4,ny4);
+    line(nx4,ny4,nx1,ny1);
+
+    // --- Reflection about X-axis ---
+    setcolor(CYAN);
+    rectangle(x1, -y1, x3, -y3);
+
+    // --- Shearing (x-direction) ---
+    int shx=1;
+    int sx1=x1+shx*y1;
+    int sx2=x2+shx*y2;
+    int sx3=x3+shx*y3;
+    int sx4=x4+shx*y4;
+    setcolor(MAGENTA);
+    line(sx1,y1,sx2,y2);
+    line(sx2,y2,sx3,y3);
+    line(sx3,y3,sx4,y4);
+    line(sx4,y4,sx1,y1);
+
     getch();
-    cleardevice();
-
-    translate2D(tx, ty);
-    drawTriangle();
-    outtextxy(50, 30, (char*)"After Translation");
-    getch();
-    cleardevice();
-
-    scale2D(sx, sy);
-    drawTriangle();
-    outtextxy(50, 30, (char*)"After Scaling");
-    getch();
-    cleardevice();
-
-    rotate2D(angle);
-    drawTriangle();
-    outtextxy(50, 30, (char*)"After Rotation");
-    getch();
-
     closegraph();
     return 0;
 }
