@@ -1,42 +1,41 @@
-#include <graphics.h>
 #include <iostream>
-#include <cmath>
+#include <graphics.h>
+#include <conio.h>
 using namespace std;
 
-void drawCirclePoints(int xc, int yc, int x, int y) {
-    putpixel(xc+x, yc+y, WHITE);
-    putpixel(xc-x, yc+y, WHITE);
-    putpixel(xc+x, yc-y, WHITE);
-    putpixel(xc-x, yc-y, WHITE);
-    putpixel(xc+y, yc+x, WHITE);
-    putpixel(xc-y, yc+x, WHITE);
-    putpixel(xc+y, yc-x, WHITE);
-    putpixel(xc-y, yc-x, WHITE);
-}
-
 int main() {
-    int gd = DETECT, gm;
-    initwindow(800, 600, (char*)"Midpoint Circle Drawing");
-
     int xc, yc, r;
-    cout << "Enter center (xc yc) and radius r: ";
-    cin >> xc >> yc >> r;
+    cout << "Enter xc: "; cin >> xc;
+    cout << "Enter yc: "; cin >> yc;
+    cout << "Enter r: ";  cin >> r;
 
-    int x = 0, y = r;
+    int gd = DETECT, gm;
+    initgraph(&gd, &gm, "");
+
+    int x = 0;
+    int y = r;
     int p = 1 - r;
 
     while (x <= y) {
-        drawCirclePoints(xc, yc, x, y);
-        x++;
+        putpixel(xc + x, yc + y, RED);
+        putpixel(xc + y, yc + x, RED);
+        putpixel(xc + x, yc - y, RED);
+        putpixel(xc + y, yc - x, RED);
+        putpixel(xc - x, yc - y, RED);
+        putpixel(xc - y, yc - x, RED);
+        putpixel(xc - x, yc + y, RED);
+        putpixel(xc - y, yc + x, RED);
+
+        x = x + 1;
         if (p < 0) {
-            p += 2*x + 1;
+            p = p + 2 * x + 1;
         } else {
-            y--;
-            p += 2*(x - y) + 1;
+            y = y - 1;
+            p = p + 2 * (x - y) + 1;
         }
     }
 
-    outtextxy(50, 30, (char*)"Midpoint Circle");
     getch();
     closegraph();
+    return 0;
 }
