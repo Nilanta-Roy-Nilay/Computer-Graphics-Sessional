@@ -1,34 +1,57 @@
-#include <stdio.h>
 #include <graphics.h>
-#include <math.h>
+#include <stdio.h>
+#include <conio.h>
 
-int main() {
-    float x1, y1, x2, y2;
-    float dx, dy, steps, xi, yi, x, y;
-    int i, gd = DETECT, gm;
-
-    printf("Enter first point (x1 y1): ");
-    scanf("%f %f", &x1, &y1);
-    printf("Enter second point (x2 y2): ");
-    scanf("%f %f", &x2, &y2);
-
+int main()
+{
+    int gd = DETECT, gm;
     initgraph(&gd, &gm, "");
+
+    int x1, y1, x2, y2;
+    int x, xend;
+    float y, dx, dy, m, c;
+
+    printf("Enter the value of x1: ");
+    scanf("%d", &x1);
+
+    printf("Enter the value of y1: ");
+    scanf("%d", &y1);
+
+    printf("Enter the value of x2: ");
+    scanf("%d", &x2);
+
+    printf("Enter the value of y2: ");
+    scanf("%d", &y2);
 
     dx = x2 - x1;
     dy = y2 - y1;
-    steps = (fabs(dx) > fabs(dy)) ? fabs(dx) : fabs(dy);
 
-    xi = dx / steps;
-    yi = dy / steps;
+    m = dy / dx;
 
-    x = x1;
-    y = y1;
-
-    for (i = 0; i <= steps; i++) {
-        putpixel(round(x), round(y), WHITE);
-        x += xi;
-        y += yi;
+    if (dx > 0)
+    {
+        x = x1;
+        y = y1;
+        xend = x2;
     }
+    else
+    {
+        x = x2;
+        y = y2;
+        xend = x1;
+    }
+
+    c = y - m * x;
+
+    while (x != xend)
+    {
+        putpixel(x, (int)(y + 0.5), WHITE);
+
+        x = x + 1;
+        y = m * x + c;
+    }
+
+    putpixel(xend, (int)(y + 0.5), WHITE);
 
     getch();
     closegraph();
