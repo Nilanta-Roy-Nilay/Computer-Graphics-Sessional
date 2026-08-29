@@ -1,40 +1,59 @@
-#include <stdio.h>
 #include <graphics.h>
-#include <math.h>
+#include <stdio.h>
+#include <conio.h>
+#include <stdlib.h>
 
-int main() {
-    float x1, y1, x2, y2, dx, dy, length, xi, yi, x, y;
-    int i, gd = DETECT, gm;
-
-    printf("Enter first point: ");
-    scanf("%f %f", &x1, &y1);
-    printf("Enter second point: ");
-    scanf("%f %f", &x2, &y2);
-
+int main()
+{
+    int gd = DETECT, gm;
     initgraph(&gd, &gm, "");
-    int xmax = getmaxx(), ymax = getmaxy();
 
-    // axes
-    line(xmax/2, 0, xmax/2, ymax);
-    line(0, ymax/2, xmax, ymax/2);
+    int x1, y1, x2, y2;
+    int dx, dy;
+    float x, y, m;
+
+    printf("Enter the value of x1: ");
+    scanf("%d", &x1);
+
+    printf("Enter the value of y1: ");
+    scanf("%d", &y1);
+
+    printf("Enter the value of x2: ");
+    scanf("%d", &x2);
+
+    printf("Enter the value of y2: ");
+    scanf("%d", &y2);
 
     dx = x2 - x1;
     dy = y2 - y1;
 
-    if (abs((int)dx) >= abs((int)dy))
-        length = abs((int)dx);
-    else
-        length = abs((int)dy);
+    m = (float)dy / dx;
 
-    xi = dx / length;
-    yi = dy / length;
+    x = x1;
+    y = y1;
 
-    x = x1; y = y1;
+    if (abs(dx) >= abs(dy))
+    {
+        while ((int)(x + 0.5) != x2)
+        {
+            putpixel((int)(x + 0.5), (int)(y + 0.5), WHITE);
 
-    for (i = 0; i <= length; i++) {
-        putpixel(xmax/2 + (int)(x+0.5), ymax/2 - (int)(y+0.5), WHITE);
-        x += xi; y += yi;
+            x = x + 1;
+            y = y + m;
+        }
     }
+    else
+    {
+        while ((int)(y + 0.5) != y2)
+        {
+            putpixel((int)(x + 0.5), (int)(y + 0.5), WHITE);
+
+            x = x + (1.0 / m);
+            y = y + 1;
+        }
+    }
+
+    putpixel(x2, y2, WHITE);
 
     getch();
     closegraph();
