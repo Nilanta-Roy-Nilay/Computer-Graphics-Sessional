@@ -1,42 +1,22 @@
-# bresenham_line.py
 import matplotlib.pyplot as plt
 
-def bresenham_line():
-    x1 = int(input("Enter first point x1: "))
-    y1 = int(input("Enter first point y1: "))
-    x2 = int(input("Enter second point x2: "))
-    y2 = int(input("Enter second point y2: "))
-    
+def bresenham_line(x1, y1, x2, y2):
     dx = x2 - x1
     dy = y2 - y1
     p = 2 * dy - dx
-    
-    x = x1
-    y = y1
-    
-    x_coords = []
-    y_coords = []
-    
-    while x < x2:
-        x_coords.append(x)
-        y_coords.append(y)
+    x, y = x1, y1
+    xs, ys = [], []
+    while x <= x2:
+        xs.append(x); ys.append(y)
+        x += 1
         if p < 0:
-            x += 1
             p += 2 * dy
         else:
-            x += 1
             y += 1
-            p += 2 * dy - 2 * dx
-            
-    plt.figure()
-    plt.axhline(0, color='black', linewidth=1)
-    plt.axvline(0, color='black', linewidth=1)
-    plt.plot(x_coords, y_coords, marker='s', color='black', markersize=5)
-    plt.title("Bresenham's Line Algorithm")
-    plt.xlabel("X-axis")
-    plt.ylabel("Y-axis")
-    plt.grid(True)
+            p += 2 * (dy - dx)
+    plt.plot(xs, ys, marker='o', color='red')
     plt.show()
 
-if __name__ == "__main__":
-    bresenham_line()
+x1, y1 = map(int, input("Enter first point: ").split())
+x2, y2 = map(int, input("Enter second point: ").split())
+bresenham_line(x1, y1, x2, y2)
