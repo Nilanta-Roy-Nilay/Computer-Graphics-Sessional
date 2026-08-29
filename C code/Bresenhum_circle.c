@@ -1,46 +1,56 @@
-#include <stdio.h>
 #include <graphics.h>
-#include <math.h>
+#include <stdio.h>
+#include <conio.h>
 
-int main() {
+int main()
+{
     int gd = DETECT, gm;
-    int x, y, xc, yc, r, p, xmax, ymax;
-
-    printf("Input center of the circle (xc yc): ");
-    scanf("%d%d", &xc, &yc);
-
-    printf("Input the radius of the circle (r): ");
-    scanf("%d", &r);
-
     initgraph(&gd, &gm, "");
 
-    xmax = getmaxx();
-    ymax = getmaxy();
+    int xc, yc;
 
-    line(xmax / 2, 0, xmax / 2, ymax);
-    line(0, ymax / 2, xmax, ymax / 2);
+    int r;
 
-    p = 3 - (2 * r);
-    x = 0;
-    y = r;
+    printf("Enter xc: ");
+    scanf("%d", &xc);
 
-    while (x <= y) {
-        putpixel((xmax / 2 + xc + x), (ymax / 2 - yc + y), WHITE);
-        putpixel((xmax / 2 + xc - x), (ymax / 2 - yc + y), WHITE);
-        putpixel((xmax / 2 + xc + x), (ymax / 2 - yc - y), WHITE);
-        putpixel((xmax / 2 + xc - x), (ymax / 2 - yc - y), WHITE);
-        putpixel((xmax / 2 + xc + y), (ymax / 2 - yc + x), WHITE);
-        putpixel((xmax / 2 + xc - y), (ymax / 2 - yc + x), WHITE);
-        putpixel((xmax / 2 + xc + y), (ymax / 2 - yc - x), WHITE);
-        putpixel((xmax / 2 + xc - y), (ymax / 2 - yc - x), WHITE);
+    printf("Enter yc: ");
+    scanf("%d", &yc);
 
-        if (p < 0) {
+    printf("Enter r: ");
+    scanf("%d", &r);
+
+
+    int x=0;
+    int y=r;
+    
+    int p = 3-2*r;
+
+
+    while (x < y)
+    {
+        putpixel(xc+x, yc+y, RED);
+        putpixel(xc+y, yc+x, RED);
+        putpixel(xc+x, yc-y, RED);
+        putpixel(xc+y, yc-x, RED);
+        putpixel(xc-x, yc-y, RED);
+        putpixel(xc-y, yc-x, RED);
+        putpixel(xc-x, yc+y, RED);
+        putpixel(xc-y, yc+x, RED);
+
+      
+        
+        if (p < 0)
+        {
             x = x + 1;
-            p = p + (4 * x) + 6;
-        } else {
+            y =y;
+            p = p + 4 * x + 6;
+        }
+        else
+        {
             x = x + 1;
             y = y - 1;
-            p = p + (4 * (x - y)) + 10;
+            p = p - 4 * y + 4 * x +10;
         }
     }
 
