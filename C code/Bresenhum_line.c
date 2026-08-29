@@ -1,30 +1,51 @@
-#include <stdio.h>
 #include <graphics.h>
+#include <stdio.h>
+#include <conio.h>
 
-int main() {
-    int x1, y1, x2, y2;
-    printf("Enter first point: ");
-    scanf("%d %d", &x1, &y1);
-    printf("Enter second point: ");
-    scanf("%d %d", &x2, &y2);
-
+int main()
+{
     int gd = DETECT, gm;
     initgraph(&gd, &gm, "");
 
-    int dx = x2 - x1;
-    int dy = y2 - y1;
-    int p = 2 * dy - dx;
-    int x = x1, y = y1;
+    int x1, y1, x2, y2;
+    int dx, dy, p;
+    int x, y;
 
-    while (x <= x2) {
+    printf("Enter x1: ");
+    scanf("%d", &x1);
+
+    printf("Enter y1: ");
+    scanf("%d", &y1);
+
+    printf("Enter x2: ");
+    scanf("%d", &x2);
+
+    printf("Enter y2: ");
+    scanf("%d", &y2);
+
+    dx = x2 - x1;
+    dy = y2 - y1;
+
+    p = 2 * dy - dx;
+
+    x = x1;
+    y = y1;
+
+    while (x <= x2)
+    {
         putpixel(x, y, WHITE);
-        x++;
-        if (p < 0) {
-            p += 2 * dy;
-        } else {
-            y++;
-            p += 2 * (dy - dx);
+
+        if (p < 0)
+        {
+            p = p + (2 * dy);
         }
+        else
+        {
+            y = y + 1;
+            p = p + (2 * dy) - (2 * dx);
+        }
+
+        x = x + 1;
     }
 
     getch();
