@@ -1,43 +1,46 @@
-#include <stdio.h>
 #include <graphics.h>
+#include <stdio.h>
+#include <conio.h>
 
-int main() {
+int main()
+{
     int gd = DETECT, gm;
-    int x, y, xc, yc, r, p, xmax, ymax;
-
-    printf("Input center of the circle : ");
-    scanf("%d%d", &xc, &yc);
-
-    printf("Input the radius of the circle : ");
-    scanf("%d", &r);
-
     initgraph(&gd, &gm, "");
 
-    xmax = getmaxx();
-    ymax = getmaxy();
+    int xc, yc;
+    int r;
 
-    line(xmax / 2, 0, xmax / 2, ymax);
-    line(0, ymax / 2, xmax, ymax / 2);
+    printf("Enter xc: ");
+    scanf("%d", &xc);
 
-    p = 1 - r;
-    x = 0;
-    y = r;
+    printf("Enter yc: ");
+    scanf("%d", &yc);
 
-    while (x <= y) {
-        putpixel((xmax / 2 + xc + x), (ymax / 2 - yc + y), WHITE);
-        putpixel((xmax / 2 + xc - x), (ymax / 2 - yc + y), WHITE);
-        putpixel((xmax / 2 + xc + x), (ymax / 2 - yc - y), WHITE);
-        putpixel((xmax / 2 + xc - x), (ymax / 2 - yc - y), WHITE);
-        putpixel((xmax / 2 + xc + y), (ymax / 2 - yc + x), WHITE);
-        putpixel((xmax / 2 + xc - y), (ymax / 2 - yc + x), WHITE);
-        putpixel((xmax / 2 + xc + y), (ymax / 2 - yc - x), WHITE);
-        putpixel((xmax / 2 + xc - y), (ymax / 2 - yc - x), WHITE);
+    printf("Enter r: ");
+    scanf("%d", &r);
 
-        if (p < 0) {
-            x = x + 1;
+    int x = 0;
+    int y = r;
+    int p = 1 - r;   // midpoint initial decision parameter
+
+    while (x <= y)
+    {
+        putpixel(xc + x, yc + y, RED);
+        putpixel(xc + y, yc + x, RED);
+        putpixel(xc + x, yc - y, RED);
+        putpixel(xc + y, yc - x, RED);
+        putpixel(xc - x, yc - y, RED);
+        putpixel(xc - y, yc - x, RED);
+        putpixel(xc - x, yc + y, RED);
+        putpixel(xc - y, yc + x, RED);
+
+        x = x + 1;
+        if (p < 0)
+        {
             p = p + 2 * x + 1;
-        } else {
-            x = x + 1;
+        }
+        else
+        {
             y = y - 1;
             p = p + 2 * (x - y) + 1;
         }
