@@ -1,31 +1,41 @@
-#include <graphics.h>
 #include <iostream>
+#include <graphics.h>
 #include <cmath>
 using namespace std;
 
 int main() {
+    float x1, y1, x2, y2;
+    cout << "Enter first point: ";
+    cin >> x1 >> y1;
+    cout << "Enter second point: ";
+    cin >> x2 >> y2;
+
     int gd = DETECT, gm;
-    initwindow(800, 600, (char*)"DDA Line Drawing");
+    initgraph(&gd, &gm, "");
+    int xmax = getmaxx(), ymax = getmaxy();
 
-    int x1, y1, x2, y2;
-    cout << "Enter line coordinates (x1 y1 x2 y2): ";
-    cin >> x1 >> y1 >> x2 >> y2;
+    line(xmax/2, 0, xmax/2, ymax);
+    line(0, ymax/2, xmax, ymax/2);
 
-    int dx = x2 - x1;
-    int dy = y2 - y1;
-    int steps = max(abs(dx), abs(dy));
+    float dx = x2 - x1;
+    float dy = y2 - y1;
 
-    float Xinc = dx / (float)steps;
-    float Yinc = dy / (float)steps;
+    float length;
+    if (abs((int)dx) >= abs((int)dy))
+        length = abs((int)dx);
+    else
+        length = abs((int)dy);
+
+    float xi = dx / length;
+    float yi = dy / length;
 
     float x = x1, y = y1;
-    for (int i = 0; i <= steps; i++) {
-        putpixel(round(x), round(y), WHITE);
-        x += Xinc;
-        y += Yinc;
+    for (int i = 0; i <= length; i++) {
+        putpixel(xmax/2 + (int)(x+0.5), ymax/2 - (int)(y+0.5), WHITE);
+        x += xi; y += yi;
     }
 
-    outtextxy(50, 30, (char*)"DDA Line");
     getch();
     closegraph();
+    return 0;
 }
