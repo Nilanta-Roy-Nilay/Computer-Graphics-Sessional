@@ -1,43 +1,28 @@
-# dda_line.py
 import matplotlib.pyplot as plt
-import numpy as np
 
-def dda_line():
-    x1 = float(input("Enter first point x1: "))
-    y1 = float(input("Enter first point y1: "))
-    x2 = float(input("Enter second point x2: "))
-    y2 = float(input("Enter second point y2: "))
-    
+def dda_line(x1, y1, x2, y2):
     dx = x2 - x1
     dy = y2 - y1
-    length = max(abs(dx), abs(dy))
-    
+
+    # abs ব্যবহার করা হয়েছে
+    length = abs(dx) if abs(dx) >= abs(dy) else abs(dy)
     xi = dx / length
     yi = dy / length
-    
-    x = x1
-    y = y1
-    i = 0
-    
-    x_coords = []
-    y_coords = []
-    
-    while i <= length:
-        x_coords.append(round(x))
-        y_coords.append(round(y))
+
+    x, y = x1, y1
+    xs, ys = [], []
+    for _ in range(int(length)+1):
+        xs.append(round(x))
+        ys.append(round(y))
         x += xi
         y += yi
-        i += 1
-        
-    plt.figure()
-    plt.axhline(0, color='black', linewidth=1)
-    plt.axvline(0, color='black', linewidth=1)
-    plt.plot(x_coords, y_coords, marker='s', color='black', markersize=5)
-    plt.title("DDA Line Algorithm")
-    plt.xlabel("X-axis")
-    plt.ylabel("Y-axis")
-    plt.grid(True)
+
+    plt.plot(xs, ys, marker='o', color='blue')
+    plt.axhline(0, color='black')
+    plt.axvline(0, color='black')
+    plt.gca().set_aspect('equal')
     plt.show()
 
-if __name__ == "__main__":
-    dda_line()
+x1, y1 = map(int, input("Enter first point: ").split())
+x2, y2 = map(int, input("Enter second point: ").split())
+dda_line(x1, y1, x2, y2)
