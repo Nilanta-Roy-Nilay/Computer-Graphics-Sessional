@@ -1,23 +1,33 @@
 #include <stdio.h>
 #include <graphics.h>
+#include <math.h>
 
 int main() {
-    int x1, y1, x2, y2;
-    printf("Enter first point: ");
-    scanf("%d %d", &x1, &y1);
-    printf("Enter second point: ");
-    scanf("%d %d", &x2, &y2);
+    float x1, y1, x2, y2;
+    float dx, dy, steps, xi, yi, x, y;
+    int i, gd = DETECT, gm;
 
-    int gd = DETECT, gm;
+    printf("Enter first point (x1 y1): ");
+    scanf("%f %f", &x1, &y1);
+    printf("Enter second point (x2 y2): ");
+    scanf("%f %f", &x2, &y2);
+
     initgraph(&gd, &gm, "");
 
-    // slope calculation
-    float m = (float)(y2 - y1) / (x2 - x1);
-    float c = y1 - m * x1;
+    dx = x2 - x1;
+    dy = y2 - y1;
+    steps = (fabs(dx) > fabs(dy)) ? fabs(dx) : fabs(dy);
 
-    for (int x = x1; x <= x2; x++) {
-        int y = (int)(m * x + c + 0.5);
-        putpixel(x, y, WHITE);
+    xi = dx / steps;
+    yi = dy / steps;
+
+    x = x1;
+    y = y1;
+
+    for (i = 0; i <= steps; i++) {
+        putpixel(round(x), round(y), WHITE);
+        x += xi;
+        y += yi;
     }
 
     getch();
