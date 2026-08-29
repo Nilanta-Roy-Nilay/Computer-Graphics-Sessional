@@ -1,44 +1,174 @@
-import numpy as np
 import matplotlib.pyplot as plt
+from matplotlib.patches import Rectangle
 
-print("--- Enter the original coordinates of the triangle ---")
-x1 = float(input("Point 1 x: "))
-y1 = float(input("Point 1 y: "))
-x2 = float(input("Point 2 x: "))
-y2 = float(input("Point 2 y: "))
-x3 = float(input("Point 3 x: "))
-y3 = float(input("Point 3 y: "))
+fig, ax = plt.subplots()
 
-print("\n--- Enter transformation values ---")
-tx = float(input("Translation (x-axis): "))
-ty = float(input("Translation (y-axis): "))
-angle = float(input("Rotation Angle (degrees): "))
-sx = float(input("Scaling (x-axis): "))
-sy = float(input("Scaling (y-axis): "))
+# Original
+ax.add_patch(Rectangle((100, 100), 100, 100, fill=False))
 
-points = np.array([
-    [x1, x2, x3, x1],
-    [y1, y2, y3, y1],
-    [1,  1,  1,  1]
-])
+# Translation
+tx = 100
+ty = 50
 
-T = np.array([[1, 0, tx], [0, 1, ty], [0, 0, 1]])
+ax.add_patch(Rectangle((100 + tx, 100 + ty),
+                       100, 100, fill=False))
 
-theta = np.radians(angle)
-c, s = np.cos(theta), np.sin(theta)
-R = np.array([[c, -s, 0], [s, c, 0], [0, 0, 1]])
+ax.set_xlim(0, 350)
+ax.set_ylim(0, 300)
+ax.set_aspect('equal')
+plt.show()
 
-S = np.array([[sx, 0, 0], [0, sy, 0], [0, 0, 1]])
 
-transform = T @ R @ S
-new_points = transform @ points
 
-plt.figure(figsize=(6, 6))
-plt.plot(points[0], points[1], 'b-o', label='Original')
-plt.plot(new_points[0], new_points[1], 'r-o', label='Transformed')
 
-plt.axhline(0, color='black', linewidth=1)
-plt.axvline(0, color='black', linewidth=1)
-plt.grid(True, linestyle='--')
-plt.legend()
+
+
+rotation
+
+import matplotlib.pyplot as plt
+from matplotlib.patches import Polygon
+import math
+
+points = [
+    (100, 100),
+    (200, 100),
+    (200, 200),
+    (100, 200)
+]
+
+angle = 45
+rad = math.radians(angle)
+
+rotated = []
+
+for x, y in points:
+    nx = x * math.cos(rad) - y * math.sin(rad)
+    ny = x * math.sin(rad) + y * math.cos(rad)
+    rotated.append((nx, ny))
+
+fig, ax = plt.subplots()
+
+ax.add_patch(
+    Polygon(points, fill=False)
+)
+
+ax.add_patch(
+    Polygon(rotated, fill=False)
+)
+
+ax.set_xlim(-150, 300)
+ax.set_ylim(-50, 300)
+ax.set_aspect('equal')
+plt.show()
+
+
+
+
+scaling
+
+import matplotlib.pyplot as plt
+from matplotlib.patches import Rectangle
+
+x1 = 100
+y1 = 100
+width = 100
+height = 100
+
+sx = 1.5
+sy = 2.0
+
+fig, ax = plt.subplots()
+
+# Original
+ax.add_patch(
+    Rectangle((x1, y1), width, height, fill=False)
+)
+
+# Scaled
+ax.add_patch(
+    Rectangle((x1 * sx, y1 * sy),
+              width * sx,
+              height * sy,
+              fill=False)
+)
+
+ax.set_xlim(0, 350)
+ax.set_ylim(0, 350)
+ax.set_aspect('equal')
+plt.show()
+
+
+
+
+
+reflection
+
+import matplotlib.pyplot as plt
+from matplotlib.patches import Rectangle
+
+x = 100
+y = 100
+w = 100
+h = 100
+
+fig, ax = plt.subplots()
+
+# Original
+ax.add_patch(
+    Rectangle((x, y), w, h, fill=False)
+)
+
+# Reflection about X-axis
+ax.add_patch(
+    Rectangle((x, -y - h), w, h, fill=False)
+)
+
+ax.axhline(0)
+
+ax.set_xlim(0, 350)
+ax.set_ylim(-300, 300)
+ax.set_aspect('equal')
+plt.show()
+
+
+
+
+
+
+Shearing
+
+import matplotlib.pyplot as plt
+from matplotlib.patches import Polygon
+
+points = [
+    (100, 100),
+    (200, 100),
+    (200, 200),
+    (100, 200)
+]
+
+shx = 1
+
+sheared = []
+
+for x, y in points:
+    nx = x + shx * y
+    ny = y
+    sheared.append((nx, ny))
+
+fig, ax = plt.subplots()
+
+# Original
+ax.add_patch(
+    Polygon(points, fill=False)
+)
+
+# Sheared
+ax.add_patch(
+    Polygon(sheared, fill=False)
+)
+
+ax.set_xlim(0, 500)
+ax.set_ylim(0, 300)
+ax.set_aspect('equal')
 plt.show()
