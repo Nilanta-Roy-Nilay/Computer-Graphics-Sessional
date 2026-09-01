@@ -1,77 +1,96 @@
 #include <graphics.h>
-#include <conio.h>
-#include <stdio.h>
 #include <math.h>
+#include <conio.h>
+#include <iostream>
 
-void drawPolygon(int x1, int y1, int x2, int y2, int x3, int y3, int x4, int y4) {
-    line(x1, y1, x2, y2);
-    line(x2, y2, x3, y3);
-    line(x3, y3, x4, y4);
-    line(x4, y4, x1, y1);
+using namespace std;
+
+void DrawPolygon(int x[], int y[], int n) {
+    for (int i = 0; i < n; i++) {
+        line(x[i], y[i], x[(i + 1) % n], y[(i + 1) % n]);
+    }
 }
 
 int main() {
     int gd = DETECT, gm;
-
-    // Original Rectangle Coordinates
-    int x1 = 100, y1 = 100;
-    int x2 = 200, y2 = 100;
-    int x3 = 200, y3 = 200;
-    int x4 = 100, y4 = 200;
-
+    int n = 4;
+    int x[4], y[4];
+    int nx[4], ny[4];
     int choice;
-    printf("--- 2D Transformations Menu ---\n");
-    printf("1. Translation\n");
-    printf("2. Rotation\n");
-    printf("3. Scaling\n");
-    printf("4. Reflection (X-axis)\n");
-    printf("5. Shearing (X-axis)\n");
-    printf("Enter choice (1-5): ");
-    scanf("%d", &choice);
+
+    for (int i = 0; i < n; i++) {
+        cout << "Enter point (x" << i + 1 << ", y" << i + 1 << "): ";
+        cin >> x[i] >> y[i];
+    }
+
+    cout << "\n--- Enter 2D Transformation menu: ---" << endl;
+    cout << "1. Translation" << endl;
+    cout << "2. Rotation" << endl;
+    cout << "3. Scaling" << endl;
+    cout << "4. Reflection" << endl;
+    cout << "5. Shearing" << endl;
+    cout << "Enter Choice(1-5): ";
+    cin >> choice;
 
     initgraph(&gd, &gm, "");
 
-    // Original Shape (Red color)
     setcolor(RED);
-    rectangle(x1, y1, x3, y3);
+    DrawPolygon(x, y, n);
 
-    // Transformed Shape Color (White)
     setcolor(WHITE);
 
-    if (choice == 1) { // Translation
-        int tx = 100, ty = 50;
-        rectangle(x1 + tx, y1 + ty, x3 + tx, y3 + ty);
-    } 
-    else if (choice == 2) { // Rotation
-        float angle = 45;
-        float rad = angle * 3.1416 / 180;
+    if (choice == 1) {
+        int tx, ty;
+        cout << "Enter Translation (tx, ty): ";
+        cin >> tx >> ty;
 
-        int nx1 = x1 * cos(rad) - y1 * sin(rad);
-        int ny1 = x1 * sin(rad) + y1 * cos(rad);
-        int nx2 = x2 * cos(rad) - y2 * sin(rad);
-        int ny2 = x2 * sin(rad) + y2 * cos(rad);
-        int nx3 = x3 * cos(rad) - y3 * sin(rad);
-        int ny3 = x3 * sin(rad) + y3 * cos(rad);
-        int nx4 = x4 * cos(rad) - y4 * sin(rad);
-        int ny4 = x4 * sin(rad) + y4 * cos(rad);
+        for (int i = 0; i < n; i++) {
+            nx[i] = x[i] + tx;
+            ny[i] = y[i] + ty;
+        }
+        DrawPolygon(nx, ny, n);
+    }
+    else if (choice == 2) {
+        float angle, rad;
+        cout << "Enter Rotation (angle): ";
+        cin >> angle;
 
-        drawPolygon(nx1, ny1, nx2, ny2, nx3, ny3, nx4, ny4);
-    } 
-    else if (choice == 3) { // Scaling
-        float sx = 1.5, sy = 2.0;
-        rectangle(x1 * sx, y1 * sy, x3 * sx, y3 * sy);
-    } 
-    else if (choice == 4) { // Reflection (Visual Screen Offset)
-        rectangle(x1, -y1 + 300, x3, -y3 + 300);
-    } 
-    else if (choice == 5) { // Shearing (X-axis)
-        float shx = 1.0;
-        int nx1 = x1 + shx * y1;
-        int nx2 = x2 + shx * y2;
-        int nx3 = x3 + shx * y3;
-        int nx4 = x4 + shx * y4;
+        rad = angle * 3.1416 / 180.0;
 
-        drawPolygon(nx1, y1, nx2, y2, nx3, y3, nx4, y4);
+        for (int i = 0; i < n; i++) {
+            nx[i] = x[i] * cos(rad) - y[i] * sin(rad);
+            ny[i] = x[i] * sin(rad) + y[i] * cos(rad);
+        }
+        DrawPolygon(nx, ny, n);
+    }
+    else if (choice == 3) {
+        float sx, sy;
+        cout << "Enter Scaling (sx, sy): ";
+        cin >> sx >> sy;
+
+        for (int i = 0; i < n; i++) {
+            nx[i] = x[i] * sx;
+            ny[i] = y[i] * sy;
+        }
+        DrawPolygon(nx, ny, n);
+    }
+    else if (choice == 4) {
+        for (int i = 0; i < n; i++) {
+            nx[i] = x[i];
+            ny[i] = -y[i] + 300;
+        }
+        DrawPolygon(nx, ny, n);
+    }
+    else if (choice == 5) {
+        float shx;
+        cout << "Enter Shearing (shx): ";
+        cin >> shx;
+
+        for (int i = 0; i < n; i++) {
+            nx[i] = x[i] + shx * y[i];
+            ny[i] = y[i];
+        }
+        DrawPolygon(nx, ny, n);
     }
 
     getch();
