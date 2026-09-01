@@ -1,55 +1,78 @@
 import math
 import matplotlib.pyplot as plt
 
-# 3D Box coordinates
-x1, y1, x2, y2, z1, z2 = 1, 1, 2, 2, 1, 2
+print("Enter 8 vertices for the 3D Cuboid (x y z):")
+x_orig, y_orig, z_orig = [], [], []
+for i in range(8):
+    x, y, z = map(float, input(f"Vertex {i+1}: ").split())
+    x_orig.append(x)
+    y_orig.append(y)
+    z_orig.append(z)
 
-print(
-    "1. Translation\n2. Rotation (Z-axis)\n3. Scaling\n4. Reflection\n5."
-    " Shearing\nChoice:"
-)
-choice = int(input())
+print("\n--- 3D Transformation Menu ---")
+print("1. Translation")
+print("2. Rotation (Z-axis)")
+print("3. Scaling")
+print("4. Reflection (XY Plane)")
+print("5. Shearing (X-axis relative to Z)")
+choice = int(input("Choice: "))
+
+if choice == 1:
+    tx = float(input("Enter tx: "))
+    ty = float(input("Enter ty: "))
+    tz = float(input("Enter tz: "))
+    x_trans = [x + tx for x in x_orig]
+    y_trans = [y + ty for y in y_orig]
+    z_trans = [z + tz for z in z_orig]
+elif choice == 2:
+    angle = float(input("Enter angle (in degrees): "))
+    rad = math.radians(angle)
+    x_trans = [x * math.cos(rad) - y * math.sin(rad) for x, y in zip(x_orig, y_orig)]
+    y_trans = [x * math.sin(rad) + y * math.cos(rad) for x, y in zip(x_orig, y_orig)]
+    z_trans = list(z_orig)
+elif choice == 3:
+    sx = float(input("Enter sx: "))
+    sy = float(input("Enter sy: "))
+    sz = float(input("Enter sz: "))
+    x_trans = [x * sx for x in x_orig]
+    y_trans = [y * sy for y in y_orig]
+    z_trans = [z * sz for z in z_orig]
+elif choice == 4:
+    x_trans = list(x_orig)
+    y_trans = list(y_orig)
+    z_trans = [-z for z in z_orig]
+elif choice == 5:
+    shx = float(input("Enter shx: "))
+    x_trans = [x + shx * z for x, z in zip(x_orig, z_orig)]
+    y_trans = list(y_orig)
+    z_trans = list(z_orig)
+
+edges = [
+    (0, 1), (1, 2), (2, 3), (3, 0),
+    (4, 5), (5, 6), (6, 7), (7, 4),
+    (0, 4), (1, 5), (2, 6), (3, 7)
+]
 
 fig = plt.figure()
 ax = fig.add_subplot(111, projection="3d")
 
-# Simple base coordinates for visual box
-x = [x1, x2, x2, x1, x1]
-y = [y1, y1, y2, y2, y1]
-z = [z1, z1, z1, z1, z1]
-
-ax.plot(x, y, z, "b--", label="Original")
-
-if choice == 1:  # Translation
-    tx, ty, tz = 2, 2, 1
+for edge in edges:
     ax.plot(
-        [i + tx for i in x],
-        [i + ty for i in y],
-        [i + tz for i in z],
+        [x_orig[edge[0]], x_orig[edge[1]]],
+        [y_orig[edge[0]], y_orig[edge[1]]],
+        [z_orig[edge[0]], z_orig[edge[1]]],
+        "b--",
+    )
+
+for edge in edges:
+    ax.plot(
+        [x_trans[edge[0]], x_trans[edge[1]]],
+        [y_trans[edge[0]], y_trans[edge[1]]],
+        [z_trans[edge[0]], z_trans[edge[1]]],
         "r-",
-        label="Translated",
-    )
-elif choice == 2:  # Rotation (Z-axis)
-    rad = math.radians(45)
-    rx = [i * math.cos(rad) - j * math.sin(rad) for i, j in zip(x, y)]
-    ry = [i * math.sin(rad) + j * math.cos(rad) for i, j in zip(x, y)]
-    ax.plot(rx, ry, z, "r-", label="Rotated")
-elif choice == 3:  # Scaling
-    sx, sy, sz = 1.5, 1.5, 1.5
-    ax.plot(
-        [i * sx for i in x],
-        [i * sy for i in y],
-        [i * sz for i in z],
-        "r-",
-        label="Scaled",
-    )
-elif choice == 4:  # Reflection (XY plane)
-    ax.plot(x, y, [-i for i in z], "r-", label="Reflected")
-elif choice == 5:  # Shearing
-    shx = 0.5
-    ax.plot(
-        [i + shx * j for i, j in zip(x, y)], y, z, "r-", label="Sheared"
     )
 
-ax.legend()
+ax.set_xlabel("X")
+ax.set_ylabel("Y")
+ax.set_zlabel("Z")
 plt.show()
