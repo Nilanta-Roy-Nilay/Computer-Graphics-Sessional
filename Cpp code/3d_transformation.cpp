@@ -1,46 +1,109 @@
 #include <graphics.h>
-#include <conio.h>
-#include <stdio.h>
 #include <math.h>
+#include <conio.h>
+#include <iostream>
+
+using namespace std;
+
+void Draw3DPolygon(int x[], int y[], int z[], int n) {
+    int px[8], py[8];
+    float perspective = 0.5;
+
+    for (int i = 0; i < n; i++) {
+        px[i] = x[i] + z[i] * perspective;
+        py[i] = y[i] - z[i] * perspective;
+    }
+
+    for (int i = 0; i < n; i++) {
+        line(px[i], py[i], px[(i + 1) % n], py[(i + 1) % n]);
+    }
+}
 
 int main() {
     int gd = DETECT, gm;
-    int x1 = 100, y1 = 100, x2 = 150, y2 = 150, depth = 20;
+    int n = 4;
+    int x[4], y[4], z[4];
+    int nx[4], ny[4], nz[4];
     int choice;
 
-    printf("--- 3D Transformation Menu ---\n");
-    printf("1. Translation\n2. Rotation (Z-axis)\n3. Scaling\n4. Reflection (Z-plane)\n5. Shearing (Z-axis)\nChoice: ");
-    scanf("%d", &choice);
+    for (int i = 0; i < n; i++) {
+        cout << "Enter point (x" << i + 1 << ", y" << i + 1 << ", z" << i + 1 << "): ";
+        cin >> x[i] >> y[i] >> z[i];
+    }
+
+    cout << "\n--- Enter 3D Transformation menu: ---" << endl;
+    cout << "1. Translation" << endl;
+    cout << "2. Rotation (Z-Axis)" << endl;
+    cout << "3. Scaling" << endl;
+    cout << "4. Reflection (XY Plane)" << endl;
+    cout << "5. Shearing" << endl;
+    cout << "Enter Choice(1-5): ";
+    cin >> choice;
 
     initgraph(&gd, &gm, "");
-    setcolor(WHITE);
-    bar3d(x1, y1, x2, y2, depth, 1); // Original 3D Box
 
     setcolor(RED);
-    if (choice == 1) { // 3D Translation
-        int tx = 80, ty = 50;
-        bar3d(x1 + tx, y1 + ty, x2 + tx, y2 + ty, depth, 1);
-    } 
-    else if (choice == 2) { // 3D Rotation (Z-axis)
-        float rad = 30 * 3.1416 / 180;
-        int nx1 = x1 * cos(rad) - y1 * sin(rad);
-        int ny1 = x1 * sin(rad) + y1 * cos(rad);
-        int nx2 = x2 * cos(rad) - y2 * sin(rad);
-        int ny2 = x2 * sin(rad) + y2 * cos(rad);
-        bar3d(nx1, ny1, nx2, ny2, depth, 1);
-    } 
-    else if (choice == 3) { // 3D Scaling
-        float sx = 1.5, sy = 1.5, sz = 1.5;
-        bar3d(x1 * sx, y1 * sy, x2 * sx, y2 * sy, depth * sz, 1);
-    } 
-    else if (choice == 4) { // 3D Reflection
-        bar3d(x1, -y1 + 300, x2, -y2 + 300, depth, 1);
-    } 
-    else if (choice == 5) { // 3D Shearing
-        float shx = 0.5;
-        int nx1 = x1 + shx * y1;
-        int nx2 = x2 + shx * y2;
-        bar3d(nx1, y1, nx2, y2, depth, 1);
+    Draw3DPolygon(x, y, z, n);
+
+    setcolor(WHITE);
+
+    if (choice == 1) {
+        int tx, ty, tz;
+        cout << "Enter Translation (tx, ty, tz): ";
+        cin >> tx >> ty >> tz;
+
+        for (int i = 0; i < n; i++) {
+            nx[i] = x[i] + tx;
+            ny[i] = y[i] + ty;
+            nz[i] = z[i] + tz;
+        }
+        Draw3DPolygon(nx, ny, nz, n);
+    }
+    else if (choice == 2) {
+        float angle, rad;
+        cout << "Enter Rotation angle around Z-axis: ";
+        cin >> angle;
+
+        rad = angle * 3.1416 / 180.0;
+
+        for (int i = 0; i < n; i++) {
+            nx[i] = x[i] * cos(rad) - y[i] * sin(rad);
+            ny[i] = x[i] * sin(rad) + y[i] * cos(rad);
+            nz[i] = z[i];
+        }
+        Draw3DPolygon(nx, ny, nz, n);
+    }
+    else if (choice == 3) {
+        float sx, sy, sz;
+        cout << "Enter Scaling factors (sx, sy, sz): ";
+        cin >> sx >> sy >> sz;
+
+        for (int i = 0; i < n; i++) {
+            nx[i] = x[i] * sx;
+            ny[i] = y[i] * sy;
+            nz[i] = z[i] * sz;
+        }
+        Draw3DPolygon(nx, ny, nz, n);
+    }
+    else if (choice == 4) {
+        for (int i = 0; i < n; i++) {
+            nx[i] = x[i];
+            ny[i] = y[i];
+            nz[i] = -z[i];
+        }
+        Draw3DPolygon(nx, ny, nz, n);
+    }
+    else if (choice == 5) {
+        float shx, shy;
+        cout << "Enter Shearing factors relative to Z (shx, shy): ";
+        cin >> shx >> shy;
+
+        for (int i = 0; i < n; i++) {
+            nx[i] = x[i] + shx * z[i];
+            ny[i] = y[i] + shy * z[i];
+            nz[i] = z[i];
+        }
+        Draw3DPolygon(nx, ny, nz, n);
     }
 
     getch();
